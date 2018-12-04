@@ -1,5 +1,8 @@
 #include "ATen/ATen.h"
 
+#include <ATen/cuda/CUDAContext.h>
+#include <THC/THC.h>
+
 namespace at { namespace native {
 
 Tensor& _clamp__cuda(Tensor& self, optional<Scalar> min, optional<Scalar> max) {
@@ -49,6 +52,29 @@ Tensor& _clamp_min_out_cuda(Tensor& result, const Tensor& self, Scalar min) {
     return at::_th_##op##_out(result, self);                     \
   }
 
+#define IMPLEMENT_UNARY_OP(op)                                                 \
+  Tensor& _##op##__cuda(Tensor& self) {                                        \
+    auto result_ = c10::make_intrusive<TensorImpl, UndefinedTensorImpl>(       \
+                       CUDATensorId(),                                         \
+                       self.dtype(),                                           \
+                       cuda::getCUDADeviceAllocator(),                         \
+                       false)                                                  \
+                       .release();                                             \
+    auto out =                                                                 \
+        Tensor(c10::intrusive_ptr<TensorImpl, UndefinedTensorImpl>::reclaim(   \
+            result_));                                                         \
+    return _##op##_out_cuda(out, self);                                        \
+  }                                                                            \
+  Tensor& _##op##_out_cuda(Tensor& result, const Tensor& self) {               \
+    auto result_ = checked_tensor_unwrap(                                      \
+        result, "result", 0, false, Backend::CUDA, self.scalar_type());        \
+    auto self_ = self.unsafeGetTensorImpl();                                          \
+    AT_DISPATCH_FLOATING_TYPES(self.type(), #op, [&] {                         \
+      THCudaDoubleTensor_##op(globalContext().getTHCState(), result_, self_);  \
+    });                                                                        \
+    result_->maybe_zero_dim(self_->dim() == 0);                                \
+    return result;                                                             \
+  }
 
 IMPLEMENT_UNARY_OP_PREQUEL(abs)
 IMPLEMENT_UNARY_OP_PREQUEL(acos)
@@ -69,7 +95,7 @@ IMPLEMENT_UNARY_OP_PREQUEL(log2)
 IMPLEMENT_UNARY_OP_PREQUEL(round)
 IMPLEMENT_UNARY_OP_PREQUEL(rsqrt)
 IMPLEMENT_UNARY_OP_PREQUEL(sigmoid)
-IMPLEMENT_UNARY_OP_PREQUEL(sin)
+IMPLEMENT_UNARY_OP(sin)
 IMPLEMENT_UNARY_OP_PREQUEL(sinh)
 IMPLEMENT_UNARY_OP_PREQUEL(sqrt)
 IMPLEMENT_UNARY_OP_PREQUEL(tan)
