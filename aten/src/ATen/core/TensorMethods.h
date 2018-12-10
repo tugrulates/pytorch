@@ -511,11 +511,11 @@ inline Tensor Tensor::sigmoid() const {
 inline Tensor & Tensor::sigmoid_() {
     return type().sigmoid_(*this);
 }
-inline Tensor Tensor::sin() const {
-    return type().sin(*this);
+inline Tensor Tensor::sin(Casting casting) const {
+    return type().sin(*this, casting);
 }
-inline Tensor & Tensor::sin_() {
-    return type().sin_(*this);
+inline Tensor & Tensor::sin_(Casting casting) {
+    return type().sin_(*this, casting);
 }
 inline Tensor Tensor::sinh() const {
     return type().sinh(*this);

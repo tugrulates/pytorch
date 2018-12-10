@@ -431,8 +431,8 @@ public:
   Tensor select(int64_t dim, int64_t index) const;
   Tensor sigmoid() const;
   Tensor & sigmoid_();
-  Tensor sin() const;
-  Tensor & sin_();
+  Tensor sin(Casting casting=Casting::No) const;
+  Tensor & sin_(Casting casting=Casting::No);
   Tensor sinh() const;
   Tensor & sinh_();
   Tensor detach() const;

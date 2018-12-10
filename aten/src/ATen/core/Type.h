@@ -341,8 +341,8 @@ struct CAFFE2_API Type {
   virtual Tensor select(const Tensor & self, int64_t dim, int64_t index) const = 0;
   virtual Tensor sigmoid(const Tensor & self) const = 0;
   virtual Tensor & sigmoid_(Tensor & self) const = 0;
-  virtual Tensor sin(const Tensor & self) const = 0;
-  virtual Tensor & sin_(Tensor & self) const = 0;
+  virtual Tensor sin(const Tensor & self, Casting casting) const = 0;
+  virtual Tensor & sin_(Tensor & self, Casting casting) const = 0;
   virtual Tensor sinh(const Tensor & self) const = 0;
   virtual Tensor & sinh_(Tensor & self) const = 0;
   virtual Tensor detach(const Tensor & self) const = 0;

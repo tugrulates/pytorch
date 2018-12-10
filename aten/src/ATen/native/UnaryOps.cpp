@@ -135,6 +135,26 @@ Tensor& mvlgamma_(Tensor& self, int64_t p) {
     return result;                                              \
   }
 
+#define IMPLEMENT_UNARY_OP_VEC_CASTING(op)                          \
+  Tensor op(const Tensor& self, Casting casting) {              \
+    Tensor result = at::empty({0}, self.options());             \
+    return at::op##_out(result, self);                          \
+  }                                                             \
+  Tensor& _##op##__cpu(Tensor& self_, Casting casting) {                         \
+    if (self_.numel() > 0) {                                    \
+      Tensor self = sort_strides(self_);                        \
+      op##Impl(kCPU, self, self);                               \
+    }                                                           \
+    return self_;                                               \
+  }                                                             \
+  Tensor& _##op##_out_cpu(Tensor& result, const Tensor& self, Casting casting) { \
+    result.resize_(self.sizes());                               \
+    if (result.numel() > 0) {                                   \
+      op##Impl(kCPU, result, self);                             \
+    }                                                           \
+    return result;                                              \
+  }
+
 #define IMPLEMENT_UNARY_OP_TH(op)                               \
   Tensor op(const Tensor& self) {                               \
     Tensor result = at::empty({0}, self.options());             \
@@ -169,7 +189,7 @@ IMPLEMENT_UNARY_OP_VEC(log2)
 IMPLEMENT_UNARY_OP_VEC(round)
 IMPLEMENT_UNARY_OP_VEC(rsqrt)
 IMPLEMENT_UNARY_OP_VEC(sigmoid)
-IMPLEMENT_UNARY_OP_VEC(sin)
+IMPLEMENT_UNARY_OP_VEC_CASTING(sin)
 IMPLEMENT_UNARY_OP_TH(sinh)
 IMPLEMENT_UNARY_OP_VEC(sqrt)
 IMPLEMENT_UNARY_OP_VEC(tan)

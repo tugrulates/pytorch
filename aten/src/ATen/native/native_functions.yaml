@@ -1457,16 +1457,16 @@
     CPU: _sigmoid_out_cpu
     CUDA: _sigmoid_out_cuda
 
-- func: sin(Tensor self) -> Tensor
+- func: sin(Tensor self, Casting casting=Casting::No) -> Tensor
   variants: function, method
 
-- func: sin_(Tensor self) -> Tensor
+- func: sin_(Tensor self, Casting casting=Casting::No) -> Tensor
   variants: function, method
   dispatch:
     CPU: _sin__cpu
     CUDA: _sin__cuda
 
-- func: sin_out(Tensor result, Tensor self) -> Tensor
+- func: sin_out(Tensor result, Tensor self, Casting casting=Casting::No) -> Tensor
   dispatch:
     CPU: _sin_out_cpu
     CUDA: _sin_out_cuda

@@ -75,7 +75,7 @@ bool isDifferentiable(Node * n) {
     "aten::remainder(Tensor self, Scalar other) -> Tensor",
     "aten::round(Tensor self) -> Tensor",
     "aten::rsqrt(Tensor self) -> Tensor",
-    "aten::sin(Tensor self) -> Tensor",
+    "aten::sin(Tensor self, Casting casting) -> Tensor",
     "aten::sinh(Tensor self) -> Tensor",
     "aten::tan(Tensor self) -> Tensor",
     "aten::trunc(Tensor self) -> Tensor",

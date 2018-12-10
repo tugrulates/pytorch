@@ -590,7 +590,7 @@ class ShapePropagator {
             "aten::selu(Tensor self) -> Tensor",
             "aten::sigmoid(Tensor self) -> Tensor",
             "aten::sign(Tensor self) -> Tensor",
-            "aten::sin(Tensor self) -> Tensor",
+            "aten::sin(Tensor self, Casting casting) -> Tensor",
             "aten::sinh(Tensor self) -> Tensor",
             "aten::softmax(Tensor self, int dim) -> Tensor",
             "aten::softplus(Tensor self, Scalar beta, Scalar threshold) -> Tensor",

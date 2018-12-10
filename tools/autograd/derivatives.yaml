@@ -208,7 +208,7 @@
   self: grad
 
 - name: cos(Tensor self)
-  self: grad * -self.sin()
+  self: grad * -self.sin(Casting::No)
 
 - name: cosh(Tensor self)
   self: grad * self.sinh()
@@ -689,7 +689,7 @@
 - name: sign(Tensor self)
   self: zeros_like(grad)
 
-- name: sin(Tensor self)
+- name: sin(Tensor self, Casting casting)
   self: grad * self.cos()
 
 - name: sinh(Tensor self)

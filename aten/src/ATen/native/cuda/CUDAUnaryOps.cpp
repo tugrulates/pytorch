@@ -49,6 +49,15 @@ Tensor& _clamp_min_out_cuda(Tensor& result, const Tensor& self, Scalar min) {
     return at::_th_##op##_out(result, self);                     \
   }
 
+#define IMPLEMENT_UNARY_OP_PREQUEL_CASTING(op)                           \
+  Tensor& _##op##__cuda(Tensor& self, Casting casting) {                          \
+    return at::_th_##op##_out(self, self);                       \
+  }                                                              \
+  Tensor& _##op##_out_cuda(Tensor& result, const Tensor& self, Casting casting) { \
+    return at::_th_##op##_out(result, self);                     \
+  }
+
+
 
 IMPLEMENT_UNARY_OP_PREQUEL(abs)
 IMPLEMENT_UNARY_OP_PREQUEL(acos)
@@ -69,7 +78,7 @@ IMPLEMENT_UNARY_OP_PREQUEL(log2)
 IMPLEMENT_UNARY_OP_PREQUEL(round)
 IMPLEMENT_UNARY_OP_PREQUEL(rsqrt)
 IMPLEMENT_UNARY_OP_PREQUEL(sigmoid)
-IMPLEMENT_UNARY_OP_PREQUEL(sin)
+IMPLEMENT_UNARY_OP_PREQUEL_CASTING(sin)
 IMPLEMENT_UNARY_OP_PREQUEL(sinh)
 IMPLEMENT_UNARY_OP_PREQUEL(sqrt)
 IMPLEMENT_UNARY_OP_PREQUEL(tan)
