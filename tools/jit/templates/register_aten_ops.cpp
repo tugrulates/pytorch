@@ -38,6 +38,7 @@ namespace torch { namespace jit {
 using autograd::Variable;
 using autograd::variable_list;
 using at::Scalar;
+using at::ScalarType;
 using at::Tensor;
 using at::TensorOptions;
 using at::DeviceGuard;

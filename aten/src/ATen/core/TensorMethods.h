@@ -241,8 +241,8 @@ inline Tensor Tensor::div(Scalar other) const {
 inline Tensor & Tensor::div_(Scalar other) {
     return type().div_(*this, other);
 }
-inline Tensor Tensor::dot(const Tensor & tensor) const {
-    return type().dot(*this, tensor);
+inline Tensor Tensor::dot(const Tensor & tensor, c10::optional<ScalarType> dtype, Casting casting) const {
+    return type().dot(*this, tensor, dtype, casting);
 }
 inline Tensor & Tensor::resize_(IntList size) {
     return type().resize_(*this, size);

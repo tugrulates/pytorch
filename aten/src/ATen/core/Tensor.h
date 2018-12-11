@@ -341,7 +341,7 @@ public:
   Tensor & div_(const Tensor & other);
   Tensor div(Scalar other) const;
   Tensor & div_(Scalar other);
-  Tensor dot(const Tensor & tensor) const;
+  Tensor dot(const Tensor & tensor, c10::optional<ScalarType> dtype=c10::nullopt, Casting casting=Casting::Promote) const;
   Tensor & resize_(IntList size);
   Tensor erf() const;
   Tensor & erf_();

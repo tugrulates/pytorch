@@ -255,7 +255,7 @@
 - name: div(Tensor self, Scalar other)
   self: grad / other
 
-- name: dot(Tensor self, Tensor tensor)
+- name: dot(Tensor self, Tensor tensor, ScalarType? dtype, Casting casting)
   self: grad * tensor
   tensor: grad * self
 

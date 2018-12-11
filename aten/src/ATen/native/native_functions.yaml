@@ -621,10 +621,10 @@
 - func: div_(Tensor self, Scalar other) -> Tensor
   variants: method
 
-- func: dot(Tensor self, Tensor tensor) -> Tensor
+- func: dot(Tensor self, Tensor tensor, *, ScalarType? dtype=None, Casting casting=Casting::Promote) -> Tensor
   variants: function, method
 
-- func: dot_out(Tensor result, Tensor self, Tensor tensor) -> Tensor
+- func: dot_out(Tensor result, Tensor self, Tensor tensor, *, ScalarType? dtype=None, Casting casting=Casting::Promote) -> Tensor
 
 - func: einsum(std::string equation, TensorList tensors) -> Tensor
 

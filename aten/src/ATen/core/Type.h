@@ -251,7 +251,7 @@ struct CAFFE2_API Type {
   virtual Tensor & div_(Tensor & self, const Tensor & other) const = 0;
   virtual Tensor div(const Tensor & self, Scalar other) const = 0;
   virtual Tensor & div_(Tensor & self, Scalar other) const = 0;
-  virtual Tensor dot(const Tensor & self, const Tensor & tensor) const = 0;
+  virtual Tensor dot(const Tensor & self, const Tensor & tensor, c10::optional<ScalarType> dtype, Casting casting) const = 0;
   virtual Tensor & resize_(Tensor & self, IntList size) const = 0;
   virtual Tensor erf(const Tensor & self) const = 0;
   virtual Tensor & erf_(Tensor & self) const = 0;

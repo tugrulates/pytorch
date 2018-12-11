@@ -355,16 +355,16 @@ Tensor& bmm_out_cpu(Tensor &result, const Tensor& batch1, const Tensor& batch2) 
   return bmm_out_or_baddbmm_(result, batch1, batch2, beta, alpha, true);
 }
 
-Tensor dot(const Tensor& self, const Tensor& tensor) {
+Tensor dot(const Tensor& self, const Tensor& tensor, c10::optional<ScalarType> dtype, Casting casting) {
   check_1d(self, "self", "dot");
   check_1d(tensor, "tensor", "dot");
   return at::_th_dot(self, tensor);
 }
 
-Tensor& dot_out(Tensor& result, const Tensor& self, const Tensor& tensor) {
+Tensor& dot_out(Tensor& result, const Tensor& self, const Tensor& tensor, c10::optional<ScalarType> dtype, Casting casting) {
   result.resize_({});
   // dispatching through type ensures we don't allow mismatched types.
-  return self.type().fill_(result, self.dot(tensor));
+  return self.type().fill_(result, self.dot(tensor, c10::nullopt, casting));
 }
 
 /*
