@@ -29,6 +29,7 @@ from ..autograd.gen_autograd import RETURNS_VIEWS_OF_INPUT
 #      | Type[] # a dynamically sized list[ of a type
 #      | Scalar[N] # a homogenous fixed size scalar list, single scalars can expand to this list
 #      | (Type1, Type2, ...) # a heterogenous tuple
+#      | Symbol # ATen symbols
 #      | Layout | ScalarType | Device | Generator # special singleton types for built-in concepts in tensor lib
 
 # clean up the variety of C++ types in the ATen declarations
@@ -58,6 +59,7 @@ TYPE_MAP = {
     'double': 'float',
     'bool': 'bool',
     'Generator': 'Generator',
+    'Symbol': 'Symbol',
 }
 
 
@@ -94,6 +96,7 @@ FROM_IVALUE = {
     'std::array<bool,2>': 'as_bool_array<2>({}.toIntList()->elements())',
     'std::array<bool,3>': 'as_bool_array<3>({}.toIntList()->elements())',
     'std::array<bool,4>': 'as_bool_array<4>({}.toIntList()->elements())',
+    'Symbol': '{}.toSymbol()',
 }
 
 

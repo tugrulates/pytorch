@@ -70,7 +70,7 @@ namespace torch {
 
 enum class ParameterType {
   TENSOR, SCALAR, INT64, DOUBLE, TENSOR_LIST, INT_LIST, GENERATOR,
-  BOOL, STORAGE, PYOBJECT, SCALARTYPE, LAYOUT, DEVICE, STRING
+  BOOL, STORAGE, PYOBJECT, SCALARTYPE, LAYOUT, DEVICE, STRING, SYMBOL
 };
 
 struct FunctionParameter;
@@ -133,6 +133,8 @@ struct PythonArgs {
   inline at::Device deviceWithDefault(int i, const at::Device& default_device);
   inline c10::optional<at::Device> deviceOptional(int i);
   inline std::string string(int i);
+  inline c10::Symbol symbol(int i);
+  inline c10::Symbol symbolWithDefault(int i, c10::Symbol default_symbol);
   inline PyObject* pyobject(int i);
   inline int64_t toInt64(int i);
   inline int64_t toInt64WithDefault(int i, int64_t default_int);
@@ -183,6 +185,7 @@ struct FunctionParameter {
     double default_double;
     at::ScalarType default_scalartype;
     THPLayout* default_layout;
+    c10::Symbol default_symbol;
   };
 };
 
@@ -388,6 +391,16 @@ inline c10::optional<at::Device> PythonArgs::deviceOptional(int i) {
 inline std::string PythonArgs::string(int i) {
   if (!args[i]) return "";
   return THPUtils_unpackString(args[i]);
+}
+
+inline c10::Symbol PythonArgs::symbol(int i) {
+  if (!args[i]) return signature.params[i].default_symbol;
+  return c10::Symbol::aten(THPUtils_unpackString(args[i]));
+}
+
+inline c10::Symbol PythonArgs::symbolWithDefault(int i, c10::Symbol default_symbol) {
+  if (!args[i]) return default_symbol;
+  return symbol(i);
 }
 
 inline int64_t PythonArgs::toInt64(int i) {

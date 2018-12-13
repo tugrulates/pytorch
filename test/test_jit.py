@@ -2068,6 +2068,14 @@ class TestJit(JitTestCase):
         warns = [str(w.message) for w in warns]
         self.assertEqual(len(warns), 0)
 
+    def test_symbol(self):
+        @torch.jit.script
+        def fn(x='default'):
+            # type: (Symbol)
+            pass
+        self.assertExpectedGraph(fn.graph)
+
+
 
 class TestBatched(TestCase):
     # generate random examples and create an batchtensor with them

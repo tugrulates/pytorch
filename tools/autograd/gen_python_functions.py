@@ -256,6 +256,7 @@ def create_python_bindings(python_functions, has_self, is_module=False):
         'bool': 'toBool',
         'double': 'toDouble',
         'std::string': 'string',
+        'Symbol': 'symbol',
     }
 
     unpack_with_default_methods = {
@@ -268,6 +269,7 @@ def create_python_bindings(python_functions, has_self, is_module=False):
         'const THPLayout &': 'layoutWithDefault',
         'const Device &': 'deviceWithDefault',
         'ScalarType': 'scalartypeWithDefault',
+        'Symbol': 'symbolWithDefault',
     }
 
     def emit_single_dispatch(declaration, out_idx, base_env):

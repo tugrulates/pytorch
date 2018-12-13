@@ -32,6 +32,7 @@ _(BoolType) \
 _(OptionalType) \
 _(VarType) \
 _(DeviceObjType) \
+_(SymbolType) \
 
 enum class TypeKind {
 #define DEFINE_TYPE(T) T,
@@ -807,7 +808,7 @@ private:
 
 struct DeviceObjType;
 using DeviceObjTypePtr = std::shared_ptr<DeviceObjType>;
-// This type represents a Generator
+// This type represents a Device
 struct CAFFE2_API DeviceObjType : public Type {
   static DeviceObjTypePtr create() {
     return DeviceObjTypePtr(new DeviceObjType()); // NOLINT(modernize-make-shared)
@@ -827,6 +828,27 @@ private:
   : Type(TypeKind::DeviceObjType) {}
 };
 
+struct SymbolType;
+using SymbolTypePtr = std::shared_ptr<SymbolType>;
+// This type represents a Symbol
+struct CAFFE2_API SymbolType : public Type {
+  static SymbolTypePtr create() {
+    return SymbolTypePtr(new SymbolType()); // NOLINT(modernize-make-shared)
+  }
+  DEFINE_IS_SUBCLASS(SymbolType);
+  bool operator==(const Type& rhs) const override {
+    return rhs.kind() == kind();
+  }
+  std::string str() const override {
+    return "Symbol";
+  }
+  static const TypeKind Kind = TypeKind::SymbolType;
+  // global singleton
+  static SymbolTypePtr get();
+private:
+  SymbolType()
+  : Type(TypeKind::SymbolType) {}
+};
 
 struct VarType;
 using VarTypePtr = std::shared_ptr<VarType>;

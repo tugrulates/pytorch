@@ -6,6 +6,7 @@
 #include <c10/core/ScalarType.h>
 #include <ATen/core/TensorMethods.h>
 #include <c10/core/TensorOptions.h>
+#include <ATen/core/interned_strings.h>
 
 #include <array>
 #include <functional>

@@ -194,6 +194,9 @@ inline IValue toIValue(py::handle obj, const TypePtr& type, c10::optional<int32_
         }
         return toIValue(obj, type->expect<OptionalType>()->getElementType());
       }
+      case TypeKind::SymbolType: {
+        return Symbol::aten(py::cast<std::string>(obj));
+      }
       case TypeKind::NumberType:
       case TypeKind::GeneratorType:
       case TypeKind::VarType:

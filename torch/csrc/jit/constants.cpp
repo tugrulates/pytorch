@@ -53,6 +53,11 @@ Value* insertConstant(
     ss << val.toDevice();
     n->s_(attr::value, ss.str());
     n->output()->setType(DeviceObjType::get());
+  } else if(val.isSymbol()) {
+    std::stringstream ss;
+    ss << val.toSymbol().toQualString();
+    n->s_(attr::value, ss.str());
+    n->output()->setType(SymbolType::get());
   } else if(val.isNone()) {
     n->destroy();
     n = g.create(prim::None);
@@ -131,6 +136,12 @@ RegisterOperators reg({
           auto d = c10::Device(node->s(attr::value));
           return [d](Stack& stack) {
             push(stack, d);
+            return 0;
+          };
+        } else if (type == SymbolType::get()) {
+          auto s = Symbol::fromQualString(node->s(attr::value));
+          return [s](Stack& stack) {
+            push(stack, s);
             return 0;
           };
         } else {

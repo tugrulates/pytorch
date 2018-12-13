@@ -74,6 +74,8 @@ std::ostream& operator<<(std::ostream & out, const IValue & v) {
       return out << "Future";
     case IValue::Tag::Device:
       return out << v.toDevice();
+    case IValue::Tag::Symbol:
+      return out << v.toSymbol().toDisplayString();
   }
   AT_ERROR("Tag not found\n");
 }

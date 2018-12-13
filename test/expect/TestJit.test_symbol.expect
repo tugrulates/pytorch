@@ -1,0 +1,3 @@
+graph(%x : Symbol) {
+  return ();
+}

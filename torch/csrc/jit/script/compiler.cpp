@@ -487,6 +487,10 @@ Value* tryConvertToType(
         DeviceObjType::get()->isSubtypeOf(concrete_type))  {
       return graph.insert(aten::device, { value }, {}, loc);
     }
+    if (value->type()->isSubtypeOf(StringType::get()) &&
+        SymbolType::get()->isSubtypeOf(concrete_type)) {
+      return graph.insert(prim::StringToSymbol, { value }, {}, loc);
+    }
   }
 
   return value;
@@ -1060,7 +1064,7 @@ private:
         TypePtr type = DynamicType::get();
         if (!schema.is_varret()) {
           type = schema.returns().at(return_type_idx).type();
-          r = tryConvertToType(range, *graph, type, r, /*allow_conversions=*/false);
+          r = tryConvertToType(range, *graph, type, r, /*allow_conversions=*/true);
           if (!r->type()->isSubtypeOf(type)) {
             throw ErrorReport(return_stmt.range()) << "Return value at position "
               << return_type_idx << " was annotated as having type " << type->str()
@@ -2680,6 +2684,7 @@ const std::unordered_map<std::string, TypePtr> &ident_to_type_lut() {
     {"bool", BoolType::get()},
     {"str", StringType::get()},
     {"Device", DeviceObjType::get()},
+    {"Symbol", SymbolType::get()},
     // technically this is not a python type but we need it when
     // parsing serialized methods that use implicit converions to Scalar
     {"number", NumberType::get()},

@@ -648,6 +648,13 @@ struct PythonPrintPass {
       printMaybeAnnotatedConstantList(stmt, "int", v.toIntListRef().size(), v);
     } else if(v.isDoubleList()) {
       printMaybeAnnotatedConstantList(stmt, "float", v.toDoubleListRef().size(), v);
+    } else if(v.isSymbol()) {
+      // if (v.toSymbol().ns().is_aten()) {
+      //   printQuotedString(stmt, v.toSymbol().toUnqualString());
+      // } else {
+      //   AT_ERROR("Pretty printer encountered a symbol that's not in aten");
+      // }
+      printQuotedString(stmt, v.toSymbol().toQualString());
     } else {
       stmt << v;
     }

@@ -25,6 +25,7 @@ using at::Scalar;
 using at::ScalarType;
 using at::SparseTensorRef;
 using at::Storage;
+using at::Symbol;
 using at::Tensor;
 using at::TensorList;
 using at::TensorOptions;

@@ -75,6 +75,7 @@ struct SchemaParser {
       {"float", FloatType::get() },
       {"int", IntType::get() },
       {"bool", BoolType::get() },
+      {"Symbol", SymbolType::get() },
     };
     auto tok = L.expect(TK_IDENT);
     auto text = tok.text();
@@ -290,6 +291,15 @@ struct SchemaParser {
     L.expect(TK_NONE);
     return IValue();
   }
+  IValue parseSymbolDefault(const SourceRange& range) {
+    auto domain = L.expect(TK_IDENT).text();
+    if(L.nextIf(':')) {
+      L.expect(':');
+      auto symbol = L.expect(TK_IDENT).text();
+      return Symbol::fromQualString(domain + "::" + symbol);
+    }
+    throw ErrorReport(range) << "invalid symbol default value";
+  }
   IValue parseDefaultValue(TypePtr arg_type, c10::optional<int32_t> arg_N) {
     auto range = L.cur().range;
     switch(arg_type->kind()) {
@@ -322,6 +332,9 @@ struct SchemaParser {
           return parseConstantList(elem_kind->kind());
         }
       } break;
+      case TypeKind::SymbolType:
+        return parseSymbolDefault(range);
+        break;
       default:
         throw ErrorReport(range) << "unexpected type, file a bug report";
     }

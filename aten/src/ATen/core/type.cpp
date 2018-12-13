@@ -95,6 +95,10 @@ DeviceObjTypePtr DeviceObjType::get() {
   static auto value = DeviceObjType::create();
   return value;
 }
+SymbolTypePtr SymbolType::get() {
+  static auto value = SymbolType::create();
+  return value;
+}
 OptionalTypePtr OptionalType::ofTensor() {
   static auto value = OptionalType::create(DynamicType::get());
   return value;
@@ -139,6 +143,8 @@ TypePtr inferTypeFrom(const IValue& value) {
     return TupleType::create(fmap(value.toTuple()->elements(), inferTypeFrom));
   } else if (value.isDevice()) {
     return DeviceObjType::get();
+  } else if (value.isSymbol()) {
+    return SymbolType::get();
   }
   AT_ASSERTM(false, "Unhandled IValue kind in inferTypeFrom");
 }

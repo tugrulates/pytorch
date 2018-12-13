@@ -335,6 +335,19 @@ RegisterOperators reg({
             return 0;
           };
         }),
+    Operator(
+        "prim::StringToSymbol(str a) -> Symbol",
+        [](const Node* node) -> Operation {
+          return [](Stack& stack) {
+            IValue val = pop(stack);
+            auto& str = val.toStringRef();
+            Symbol s = (str.find("::") == str.npos)
+                ? Symbol::aten(str)
+                : Symbol::fromQualString(str);
+            push(stack, s);
+            return 0;
+          };
+        }),
 
     Operator(
         "prim::RaiseException(str msg) -> ()",

@@ -13,6 +13,7 @@
 #include <c10/core/TensorTypeIdRegistration.h>
 #include <ATen/core/Reduction.h>
 #include <c10/core/TensorOptions.h>
+#include <ATen/core/interned_strings.h>
 
 #include <c10/util/Optional.h>
 

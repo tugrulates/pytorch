@@ -5,6 +5,7 @@
 #include <c10/core/TensorImpl.h>
 #include <c10/core/UndefinedTensorImpl.h>
 #include <ATen/core/blob.h>
+#include <ATen/core/interned_strings.h>
 #include <c10/util/intrusive_ptr.h>
 #include <ATen/core/thread_pool.h>
 
@@ -102,7 +103,8 @@ using GenericList = List<IValue>;
   _(Blob) \
   _(GenericList) \
   _(Future) \
-  _(Device)
+  _(Device) \
+  _(Symbol)
 
 struct CAFFE2_API IValue final {
   IValue()
@@ -395,6 +397,17 @@ struct CAFFE2_API IValue final {
     throw std::runtime_error("IValue is not a Scalar");
   }
 
+  // Symbol
+  IValue(c10::Symbol s)
+  : tag(Tag::Symbol), is_intrusive_ptr(false) {
+    payload.as_int = s;
+  }
+  bool isSymbol() const { return Tag::Symbol == tag; }
+  c10::Symbol toSymbol() const {
+    AT_ASSERT(isSymbol());
+    return c10::Symbol(payload.as_int);
+  }
+
   // Device
   IValue(c10::Device d)
   : tag(Tag::Device), is_intrusive_ptr(false) {
@@ -654,6 +667,7 @@ DEFINE_TO(IValue, toIValue)
 DEFINE_TO(c10::Device, toDevice)
 DEFINE_TO(at::ScalarType, toScalarType)
 DEFINE_TO(at::Layout, toLayout)
+DEFINE_TO(c10::Symbol, toSymbol)
 
 // note: when adding a DEFINE_TO case here you should also add a
 // toX method to IValue. These named methods are much more discoverable
