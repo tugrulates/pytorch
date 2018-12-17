@@ -4,6 +4,7 @@
 #include <ATen/NativeFunctions.h>
 #include <ATen/LegacyTHFunctions.h>
 #include <ATen/native/LinearAlgebraUtils.h>
+#include <ATen/native/ResultType.h>
 #include <ATen/TensorUtils.h>
 #include <ATen/Parallel.h>
 #include <functional>
