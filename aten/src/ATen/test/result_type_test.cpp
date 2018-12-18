@@ -102,6 +102,8 @@ TEST(TestResultType, ResultTypeTestCPU) {
   testResultType(CPU(kChar), CPU(kInt));
   testResultType(CPU(kInt), CPU(kFloat));
   testResultType(CPU(kFloat), CPU(kDouble));
+  testResultType(CPU(kDouble), CPU(kComplexFloat));
+  testResultType(CPU(kHalf), CPU(kComplexDouble));
 }
 
 TEST(TestResultType, ResultTypeTestGPU) {
@@ -109,6 +111,8 @@ TEST(TestResultType, ResultTypeTestGPU) {
     testResultType(CUDA(kChar), CUDA(kInt));
     testResultType(CUDA(kInt), CUDA(kFloat));
     testResultType(CUDA(kFloat), CUDA(kDouble));
+    testResultType(CPU(kDouble), CPU(kComplexFloat));
+    testResultType(CPU(kHalf), CPU(kComplexDouble));
   }
 }
 
@@ -222,11 +226,13 @@ void testPromoteOperands(Type& weakType, Type& mediumType, Type& strongType) {
 
 TEST(TestResultType, PromoteOperandsTestCPU) {
   testPromoteOperands(CPU(kInt), CPU(kFloat), CPU(kDouble));
+  testPromoteOperands(CPU(kShort), CPU(kDouble), CPU(kComplexDouble));
 }
 
 TEST(TestResultType, PromoteOperandsTestGPU) {
   if (at::hasCUDA()) {
     testPromoteOperands(CUDA(kInt), CUDA(kFloat), CUDA(kDouble));
+    testPromoteOperands(CPU(kShort), CPU(kComplexHalf), CPU(kComplexFloat));
   }
 }
 

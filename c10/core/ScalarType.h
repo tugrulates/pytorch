@@ -174,25 +174,28 @@ static inline ScalarType promoteTypes(ScalarType a, ScalarType b) {
   constexpr auto f2 = ScalarType::Half;
   constexpr auto f4 = ScalarType::Float;
   constexpr auto f8 = ScalarType::Double;
+  constexpr auto z4 = ScalarType::ComplexHalf;
+  constexpr auto z8 = ScalarType::ComplexFloat;
+  constexpr auto z16 = ScalarType::ComplexDouble;
   constexpr auto ud = ScalarType::Undefined;
   if (a == ud || b == ud) {
     return ScalarType::Undefined;
   }
-  if (isComplexType(a) || isComplexType(b)) {
-    AT_ERROR("promoteTypes with complex numbers is not handled yet; figure out what the correct rules should be");
-  }
   static constexpr ScalarType _promoteTypesLookup
       [static_cast<int>(ScalarType::NumOptions)]
       [static_cast<int>(ScalarType::NumOptions)] = {
-            /* u1  i1  i2  i4  i8  f2  f4  f8 */
-    /* u1 */ { u1, i2, i2, i4, i8, f2, f4, f8 },
-    /* i1 */ { i2, i1, i2, i4, i8, f2, f4, f8 },
-    /* i2 */ { i2, i2, i2, i4, i8, f2, f4, f8 },
-    /* i4 */ { i4, i4, i4, i4, i8, f2, f4, f8 },
-    /* i8 */ { i8, i8, i8, i8, i8, f2, f4, f8 },
-    /* f2 */ { f2, f2, f2, f2, f2, f2, f4, f8 },
-    /* f4 */ { f4, f4, f4, f4, f4, f4, f4, f8 },
-    /* f8 */ { f8, f8, f8, f8, f8, f8, f8, f8 },
+            /*   u1   i1   i2   i4   i8   f2   f4   f8   z4   z8  z16 */
+    /*  u1 */ {  u1,  i2,  i2,  i4,  i8,  f2,  f4,  f8,  z4,  z8, z16 },
+    /*  i1 */ {  i2,  i1,  i2,  i4,  i8,  f2,  f4,  f8,  z4,  z8, z16 },
+    /*  i2 */ {  i2,  i2,  i2,  i4,  i8,  f2,  f4,  f8,  z4,  z8, z16 },
+    /*  i4 */ {  i4,  i4,  i4,  i4,  i8,  f2,  f4,  f8,  z4,  z8, z16 },
+    /*  i8 */ {  i8,  i8,  i8,  i8,  i8,  f2,  f4,  f8,  z4,  z8, z16 },
+    /*  f2 */ {  f2,  f2,  f2,  f2,  f2,  f2,  f4,  f8,  z4,  z8, z16 },
+    /*  f4 */ {  f4,  f4,  f4,  f4,  f4,  f4,  f4,  f8,  z4,  z8, z16 },
+    /*  f8 */ {  f8,  f8,  f8,  f8,  f8,  f8,  f8,  f8,  z4,  z8, z16 },
+    /*  z4 */ {  z4,  z4,  z4,  z4,  z4,  z4,  z4,  z4,  z4,  z8, z16 },
+    /*  z8 */ {  z8,  z8,  z8,  z8,  z8,  z8,  z8,  z8,  z8,  z8, z16 },
+    /* z16 */ { z16, z16, z16, z16, z16, z16, z16, z16, z16, z16, z16 },
   };
   return _promoteTypesLookup[static_cast<int>(a)][static_cast<int>(b)];
 }
