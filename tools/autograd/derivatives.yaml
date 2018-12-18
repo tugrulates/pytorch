@@ -507,8 +507,8 @@
   other: grad.clone().masked_fill_(self < other, 0)
 
 - name: mm(Tensor self, Tensor mat2)
-  self: mm_mat1_backward(grad, mat2, self, 1)
-  mat2: mm_mat2_backward(grad, self, mat2.sizes(), mat2.strides(), 1)
+  self: mm_mat1_backward(grad, mat2, self, 1).to(self.type())
+  mat2: mm_mat2_backward(grad, self, mat2.sizes(), mat2.strides(), 1).to(mat2.type())
 
 - name: mode(Tensor self, int64_t dim, bool keepdim)
   self: index_select_backward(grad, dim, result1, self.sizes(), keepdim)

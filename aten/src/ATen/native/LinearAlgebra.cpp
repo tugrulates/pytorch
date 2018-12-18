@@ -152,14 +152,18 @@ Tensor& ger_out(Tensor& result, const Tensor& self, const Tensor& vec2) {
   return at::legacy::th::_th_ger_out(result, self, vec2);
 }
 
-Tensor mm(const Tensor& self, const Tensor& mat2) {
+Tensor mm(const Tensor& self_, const Tensor& mat2_) {
+  Tensor self, mat2;
+  std::tie(self, mat2) = promoteOperands(self_, mat2_);
   if (self.is_sparse()) {
     return mat2.type().addmm(at::zeros({}, mat2.type()), self, mat2, 0, 1);
   }
   return at::legacy::th::_th_mm(self, mat2);
 }
 
-Tensor& mm_out(Tensor& result, const Tensor& self, const Tensor& mat2) {
+Tensor& mm_out(Tensor& result, const Tensor& self_, const Tensor& mat2_) {
+  Tensor self, mat2;
+  std::tie(self, mat2) = castOperands(result.scalar_type(), self_, mat2_);
   if (self.is_sparse()) {
     return at::addmm_out(result, at::zeros({}, mat2.options()), self, mat2, 0, 1);
   }
@@ -390,11 +394,16 @@ The behavior depends on the dimensionality of the Tensors as follows:
 */
 Tensor matmul(
     c10::optional<Tensor> out_opt,
-    const Tensor& tensor1,
-    const Tensor& tensor2) {
+    Tensor tensor1,
+    Tensor tensor2) {
+  auto has_out = out_opt.has_value();
+  if(has_out) {
+    std::tie(tensor1, tensor2) = castOperands(out_opt->scalar_type(), tensor1, tensor2);
+  } else {
+    std::tie(tensor1, tensor2) = promoteOperands(tensor1, tensor2);
+  }
   auto dim_tensor1 = tensor1.dim();
   auto dim_tensor2 = tensor2.dim();
-  auto has_out = out_opt.has_value();
   Tensor out = out_opt.value_or(Tensor());
 
   if (dim_tensor1 == 1 && dim_tensor2 == 1) {
